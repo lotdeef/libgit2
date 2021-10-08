@@ -31,6 +31,8 @@
 #define GIT_CAP_THIN_PACK "thin-pack"
 #define GIT_CAP_SYMREF "symref"
 
+#define GIT_CAP_PUSH_OPTIONS "push-options"
+
 extern bool git_smart__ofs_delta_enabled;
 
 typedef enum {

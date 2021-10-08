@@ -643,6 +643,7 @@ static int gen_pktline(git_str *buf, git_push *push)
 			if (push->report_status)
 				len += strlen(GIT_CAP_REPORT_STATUS) + 1;
 			len += strlen(GIT_CAP_SIDE_BAND_64K) + 1;
+			len += strlen(GIT_CAP_PUSH_OPTIONS) + 1;
 		}
 
 		git_oid_fmt(old_id, &spec->roid);
@@ -659,12 +660,18 @@ static int gen_pktline(git_str *buf, git_push *push)
 			}
 			git_str_putc(buf, ' ');
 			git_str_printf(buf, GIT_CAP_SIDE_BAND_64K);
+
+			git_str_putc(buf, ' ');
+			git_str_printf(buf, GIT_CAP_PUSH_OPTIONS);
 		}
 
 		git_str_putc(buf, '\n');
 	}
 
 	git_str_puts(buf, "0000");
+
+	// temp push options
+	git_str_puts(buf, "0014well hello there0000");
 	return git_str_oom(buf) ? -1 : 0;
 }
 
