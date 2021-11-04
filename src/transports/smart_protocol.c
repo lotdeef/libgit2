@@ -670,8 +670,13 @@ static int gen_pktline(git_str *buf, git_push *push)
 
 	git_str_puts(buf, "0000");
 
-	// temp push options
-	git_str_puts(buf, "0014well hello there0000");
+	// TODO temp push options
+	const char *argument;
+	git_vector_foreach(&(push->remote->arguments), i, argument) {
+		git_str_printf(buf, "%04"PRIxZ"%s", strlen(argument) + 4, argument);
+	}
+	git_str_puts(buf, "0000"); // must include if push options is enabled (even if empty string)
+
 	return git_str_oom(buf) ? -1 : 0;
 }
 

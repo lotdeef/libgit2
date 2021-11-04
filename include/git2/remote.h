@@ -1033,6 +1033,13 @@ GIT_EXTERN(int) git_remote_prune(
 	git_remote *remote,
 	const git_remote_callbacks *callbacks);
 
+// TODO push options
+GIT_EXTERN(int) git_remote_push_with_arguments(git_remote *remote,
+				const git_strarray *refspecs,
+				const git_push_options *opts,
+				size_t num_args,
+				const char **args);
+
 /**
  * Perform a push.
  *
