@@ -812,9 +812,14 @@ typedef struct {
 	 * Extra headers for this push operation
 	 */
 	git_strarray custom_headers;
+
+	/**
+	 * Push options to pass to git server hooks
+	 */
+	git_strarray arguments;
 } git_push_options;
 
-#define GIT_PUSH_OPTIONS_VERSION 1
+#define GIT_PUSH_OPTIONS_VERSION 2
 #define GIT_PUSH_OPTIONS_INIT { GIT_PUSH_OPTIONS_VERSION, 1, GIT_REMOTE_CALLBACKS_INIT, GIT_PROXY_OPTIONS_INIT }
 
 /**
@@ -1032,13 +1037,6 @@ GIT_EXTERN(int) git_remote_fetch(
 GIT_EXTERN(int) git_remote_prune(
 	git_remote *remote,
 	const git_remote_callbacks *callbacks);
-
-// TODO push options
-GIT_EXTERN(int) git_remote_push_with_arguments(git_remote *remote,
-				const git_strarray *refspecs,
-				const git_push_options *opts,
-				size_t num_args,
-				const char **args);
 
 /**
  * Perform a push.

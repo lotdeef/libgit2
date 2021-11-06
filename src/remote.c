@@ -489,8 +489,6 @@ int git_remote_lookup(git_remote **out, git_repository *repo, const char *name)
 		goto cleanup;
 	}
 
-	printf("created???\n");
-
 	if ((error = git_str_printf(&buf, "remote.%s.url", name)) < 0)
 		goto cleanup;
 
@@ -2891,27 +2889,7 @@ cleanup:
 	return error;
 }
 
-// TODO push options
-int git_remote_push_with_arguments(git_remote *remote, const git_strarray *refspecs, const git_push_options *opts, size_t num_args, const char **args)
-{
-	if (git_vector_init(&(remote->arguments), 0, NULL) < 0) {
-		return -1;
-	}
-	
-	size_t i;
-	for (i = 0; i < num_args; i++) {
-		git_vector_insert(&(remote->arguments), git__strdup(args[i]));
-	}
-
-	int code = git_remote_push(remote, refspecs, opts);
-	git_vector_free(&(remote->arguments));
-	return code;
-}
-
-int git_remote_push(
-	git_remote *remote,
-	const git_strarray *refspecs,
-	const git_push_options *opts)
+int git_remote_push(git_remote *remote, const git_strarray *refspecs, const git_push_options *opts)
 {
 	git_remote_connect_options connect_opts = GIT_REMOTE_CONNECT_OPTIONS_INIT;
 	int error;

@@ -31,7 +31,7 @@
 #define GIT_CAP_THIN_PACK "thin-pack"
 #define GIT_CAP_SYMREF "symref"
 
-#define GIT_CAP_PUSH_OPTIONS "push-options"
+#define GIT_CAP_PUSH_ARGUMENTS "push-options"
 
 extern bool git_smart__ofs_delta_enabled;
 
@@ -130,7 +130,8 @@ typedef struct transport_smart_caps {
 	             include_tag:1,
 	             delete_refs:1,
 	             report_status:1,
-	             thin_pack:1;
+	             thin_pack:1,
+	             push_arguments:1;
 } transport_smart_caps;
 
 typedef int (*packetsize_cb)(size_t received, void *payload);
