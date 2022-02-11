@@ -271,6 +271,20 @@ failed:
 	git_buf_dispose(&ref_name);
 }
 
+static void verify_push_options_received(git_strarray expected_push_arguments){
+	git_str msg = GIT_STR_INIT;
+	int failed = 0;
+	if(expected_push_arguments.count != 0) {
+		//temp fail
+		failed = 1;
+	}
+	if(failed){
+		git_str_printf(&msg, "Did not receive push option '%s'.", expected_push_arguments.strings[0]);
+		cl_fail(git_str_cstr(&msg));
+		git_str_dispose(&msg);
+	}
+}
+
 static void verify_update_tips_callback(git_remote *remote, expected_ref expected_refs[], size_t expected_refs_len)
 {
 	git_refspec *fetch_spec;
@@ -473,7 +487,7 @@ static void do_push(
 	push_status expected_statuses[], size_t expected_statuses_len,
 	expected_ref expected_refs[], size_t expected_refs_len,
 	int expected_ret, int check_progress_cb, int check_update_tips_cb,
-	git_strarray push_arguments)
+	git_strarray expected_push_arguments)
 {
 	git_push_options opts = GIT_PUSH_OPTIONS_INIT;
 	size_t i;
@@ -485,8 +499,8 @@ static void do_push(
 		/* Auto-detect the number of threads to use */
 		opts.pb_parallelism = 0;
 
-		if(push_arguments.count == 0)
-			opts.arguments = push_arguments;
+		if(expected_push_arguments.count == 0)
+			opts.arguments = expected_push_arguments;
 
 		memcpy(&opts.callbacks, &_record_cbs, sizeof(git_remote_callbacks));
 		data = opts.callbacks.payload;
@@ -526,6 +540,8 @@ static void do_push(
 
 		verify_refs(_remote, expected_refs, expected_refs_len);
 		verify_tracking_branches(_remote, expected_refs, expected_refs_len);
+
+		verify_push_options_received(expected_push_arguments);
 
 		if (check_update_tips_cb)
 			verify_update_tips_callback(_remote, expected_refs, expected_refs_len);
